@@ -1,7 +1,6 @@
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import { Grid, TextField } from '@mui/material';
-import { Product } from './types';
 
 interface BasicInfoProps {
   control: any;
@@ -15,14 +14,17 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ control, errors }) => {
         <Controller
           name="id"
           control={control}
-          defaultValue=""
+          defaultValue={0}
           render={({ field }) => (
             <TextField
               {...field}
               label="ID do item"
               variant="outlined"
+              type="number"
               fullWidth
               error={!!errors.id}
+              value={field.value}
+              onChange={(e) => field.onChange(parseInt(e.target.value))}
               helperText={errors.id ? errors.id.message : ''}
             />
           )}

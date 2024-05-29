@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Container, Box, Typography, Stack, Tabs, Tab, Button, Snackbar, Alert } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Container, Box, Typography, Stack, Tabs, Tab, Button, Snackbar, Alert, Badge } from '@mui/material';
 import { TabPanel, TabContext } from '@mui/lab';
 import BasicInfo from './BasicInfo';
 import PricingStockInfo from './PricingStockInfo';
 import CategoryLocationInfo from './CategoryLocationInfo';
-import { createProduct } from '../../api/crudProducts';
-import { Product } from '../../assets/types/types';
-
+import { createProduct, getProductById, updateProduct, deleteProduct } from '../../api/crudProducts';
+import { Product } from '../../types/types';
 
 const schema = z.object({
-  id: z.string().min(1, { message: "ID é obrigatório" }),
+  id: z.number().min(0, { message: "ID é obrigatório" }),
   name: z.string().min(1, { message: "Nome é obrigatório" }),
   image: z.string().url({ message: "URL da imagem inválida" }),
   description: z.string().optional(),
@@ -29,12 +29,28 @@ const schema = z.object({
 type ItemFormInputs = z.infer<typeof schema>;
 
 const ItemForm: React.FC = () => {
-  const { control, handleSubmit, formState: { errors, isValid } } = useForm<ItemFormInputs>({
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { control, handleSubmit, setValue, formState: { errors, isValid } } = useForm<ItemFormInputs>({
     resolver: zodResolver(schema),
-    mode: 'onChange', // Validates the form on change for instant feedback
+    mode: 'onChange',
   });
   const [currentTab, setCurrentTab] = useState('1');
-  const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string }>();
+  const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | undefined>();
+
+  useEffect(() => {
+    if (id) {
+      const fetchProduct = async () => {
+        const product = await getProductById(Number(id));
+        if (product) {
+          for (const key in product) {
+            setValue(key as keyof ItemFormInputs, product[key as keyof Product]);
+          }
+        }
+      };
+      fetchProduct();
+    }
+  }, [id, setValue]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);
@@ -47,10 +63,26 @@ const ItemForm: React.FC = () => {
     }
 
     try {
-      await createProduct(data as Product);
-      setNotification({ type: 'success', message: `Produto ${data.name} cadastrado com sucesso` });
+      if (id) {
+        await updateProduct(Number(id), data as Product);
+        setNotification({ type: 'success', message: `Produto ${data.name} atualizado com sucesso` });
+      } else {
+        await createProduct(data as Product);
+        setNotification({ type: 'success', message: `Produto ${data.name} cadastrado com sucesso` });
+      }
     } catch (error) {
-      setNotification({ type: 'error', message: 'Falha ao cadastrar produto' });
+      setNotification({ type: 'error', message: 'Falha ao salvar o produto' });
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      if (id) {
+        await deleteProduct(Number(id));
+        setNotification({ type: 'success', message: `Produto deletado com sucesso` });
+      }
+    } catch (error) {
+      setNotification({ type: 'error', message: 'Falha ao deletar o produto' });
     }
   };
 
@@ -58,10 +90,24 @@ const ItemForm: React.FC = () => {
     setNotification(undefined);
   };
 
+  const handleCancel = () => {
+    navigate('/home');
+  };
+
+  const getTabLabel = (label: string, errorKey: string) => {
+    const hasError = errors[errorKey as keyof typeof errors];
+    return (
+      <Badge color="error" variant="dot" invisible={!hasError}>
+        {label}
+      </Badge>
+    );
+  };
+
   return (
     <Box
       sx={{
         minHeight: '100vh',
+        minWidth: '100vw',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -81,13 +127,13 @@ const ItemForm: React.FC = () => {
           }}
         >
           <Typography variant="h4" gutterBottom sx={{ fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' } }}>
-            Cadastro de Itens para Venda
+            {id ? 'Editar Produto' : 'Cadastro de Itens para Venda'}
           </Typography>
           <TabContext value={currentTab}>
             <Tabs value={currentTab} onChange={handleChange} centered>
-              <Tab label="Dados Básicos" value="1" />
-              <Tab label="Valores e Estoque" value="2" />
-              <Tab label="Categoria e Localização" value="3" />
+              <Tab label={getTabLabel("Dados Básicos", "name")} value="1" />
+              <Tab label={getTabLabel("Valores e Estoque", "purchasePrice")} value="2" />
+              <Tab label={getTabLabel("Categoria e Localização", "category")} value="3" />
             </Tabs>
             <form onSubmit={handleSubmit(onSubmit)}>
               <TabPanel value="1">
@@ -98,12 +144,30 @@ const ItemForm: React.FC = () => {
               </TabPanel>
               <TabPanel value="3">
                 <CategoryLocationInfo control={control} errors={errors} />
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                  <Button type="submit" variant="contained" color="primary">
-                    Salvar Produto
-                  </Button>
-                </Box>
               </TabPanel>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+                <Button type="submit" variant="contained" color="primary">
+                  {id ? 'Atualizar Produto' : 'Salvar Produto'}
+                </Button>
+                {id && (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={{ ml: 2 }}
+                    onClick={handleDelete}
+                  >
+                    Deletar Produto
+                  </Button>
+                )}
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  sx={{ ml: 2 }}
+                  onClick={handleCancel}
+                >
+                  Cancelar
+                </Button>
+              </Box>
             </form>
           </TabContext>
         </Stack>
@@ -113,11 +177,11 @@ const ItemForm: React.FC = () => {
           onClose={handleClose}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         >
-          {notification ? (
+          {notification && (
             <Alert onClose={handleClose} severity={notification.type} sx={{ width: '100%' }}>
               {notification.message}
             </Alert>
-          ) : null}
+          )}
         </Snackbar>
       </Container>
     </Box>

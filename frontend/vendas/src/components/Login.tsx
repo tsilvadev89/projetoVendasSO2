@@ -24,7 +24,7 @@ const Login: React.FC = () => {
   const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
   const onSubmit = (data: LoginFormInputs) => {
-    if (data.email === 'admin@admin.com' && data.password === 'admin') {
+    if (data.email === 'admin@admin.com' && data.password === '123456789') {
       setNotification({ type: 'success', message: 'Login bem-sucedido!' });
       setTimeout(() => {
         navigate('/home');
@@ -37,6 +37,7 @@ const Login: React.FC = () => {
   return (
     <Box
       sx={{
+        minWidth:'100vw',
         minHeight: '100vh',
         display: 'flex',
         justifyContent: 'center',
@@ -45,6 +46,7 @@ const Login: React.FC = () => {
     >
       <Stack
         sx={{
+          
           background: 'rgba(255, 255, 255, 0.1)',
           backdropFilter: 'blur(10px)',
           borderRadius: 2,

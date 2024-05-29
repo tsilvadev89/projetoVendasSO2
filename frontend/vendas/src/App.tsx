@@ -1,10 +1,8 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ItemForm from './components/ItemForm/ItemForm';
 import Login from './components/Login';
-import Home from './components/Home';
-
+import Home from './components/home/Home';
 
 const App: React.FC = () => {
   return (
@@ -12,7 +10,8 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/c" element={<ItemForm />} />
+        <Route path="/create" element={<ItemForm />} />
+        <Route path="/edit/:id" element={<ItemForm />} />
       </Routes>
     </Router>
   );

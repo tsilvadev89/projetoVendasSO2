@@ -1,4 +1,5 @@
-import { Product } from './types';
+import { Product } from "../types/types";
+
 
 const apiUrl = 'https://api.example.com/products'; // Substitua pela URL da sua API
 
@@ -13,7 +14,7 @@ export const createProduct = async (product: Product) => {
   return response.json();
 };
 
-export const updateProduct = async (id: string, product: Product) => {
+export const updateProduct = async (id: number, product: Product) => {
   const response = await fetch(`${apiUrl}/${id}`, {
     method: 'PUT',
     headers: {
@@ -24,14 +25,14 @@ export const updateProduct = async (id: string, product: Product) => {
   return response.json();
 };
 
-export const deleteProduct = async (id: string) => {
+export const deleteProduct = async (id: number) => {
   const response = await fetch(`${apiUrl}/${id}`, {
     method: 'DELETE',
   });
   return response.json();
 };
 
-export const getProduct = async (id: string) => {
+export const getProductById = async (id: number) => {
   const response = await fetch(`${apiUrl}/${id}`);
   return response.json();
 };
