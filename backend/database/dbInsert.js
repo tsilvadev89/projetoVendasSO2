@@ -1,5 +1,3 @@
-const { reunioes, observacao, preferencias_usuario } = require("./dbDefault");
-
 const initialInserts = {
     usuario: `
         INSERT INTO usuario (nome_usuario, email_usuario, senha_usuario, diretoria_usuario, permissao_usuario, admin_usuario, userPhoto) VALUES 
@@ -14,169 +12,20 @@ const initialInserts = {
             ("usuario09", "user09@gmail.com", "123456789", 0, "2", 0, "https://plus.unsplash.com/premium_photo-1675130119373-61ada6685d63?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"),
             ("usuario10", "user10@gmail.com", "123456789", 0, "1", 0, "https://images.unsplash.com/photo-1615813967515-e1838c1c5116?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"),
             ("usuario11", "user11@gmail.com", "123456789", 1, "1", 0, "https://https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"),
-            ("usuario12", "user12@gmail.com", "123456789", 1, "1", 0, "https://images.unsplash.com/photo-1573497019418-b400bb3ab074?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");`
-    ,
-    
-    
-    salaPresencial:`
-        INSERT INTO salaPresencial (nome, tamanho, vagas, permissao_sala) VALUES
-            ('Sala Presencial 1', 'Pequena', 10, '1'),
-            ('Sala Presencial 2', 'Pequena', 4, '1'),
-            ('Sala Presencial 3', 'Média', 15, '2'),
-            ('Sala Presencial 4', 'Média', 20, '2'),
-            ('Sala Presencial 5', 'Grande', 15, '3'),
-            ('Sala Presencial 6', 'Grande', 20, '3'),
-            ('Sala Presencial 7', 'Grande', 25, '3'),
-            ('Sala Presencial 8', 'Auditório', 150, '4'),
-            ('Sala Presencial 9', 'Auditório', 200, '4'),
-            ('Sala Presencial 10', 'Auditório', 100, '4');`
-        ,
-
-    salaOnline:`
-        INSERT INTO salaOnline (nome, link) VALUES
-        ('Sala Online 1', 'https://salaonline1.com'),
-        ('Sala Online 2', 'https://salaonline2.com'),
-        ('Sala Online 3', 'https://salaonline3.com'),
-        ('Sala Online 4', 'https://salaonline4.com'),
-        ('Sala Online 5', 'https://salaonline5.com');
-        `
-        ,
-
-    reunioesPresenciais:`
-        INSERT INTO reuniao (titulo, descricao, data_inicio, data_final, tipo, sala_presencial_id, organizador_id)
-            VALUES
-            ('Reunião Presencial 1', 'Discussão sobre o novo projeto', '2024-05-20 09:00:00', '2024-05-20 11:00:00', 'Presencial', 1, 1),
-            ('Reunião Presencial 2', 'Apresentação de resultados do trimestre', '2024-05-22 14:00:00', '2024-05-22 16:00:00', 'Presencial', 2, 2),
-            ('Reunião Presencial 3', 'Planejamento estratégico para o próximo ano', '2024-05-25 10:00:00', '2024-05-25 12:00:00', 'Presencial', 3, 3),
-            ('Reunião Presencial 4', 'Avaliação de desempenho dos colaboradores', '2024-05-28 15:00:00', '2024-05-28 17:00:00', 'Presencial', 4, 4),
-            ('Reunião Presencial 5', 'Brainstorming de ideias para campanha de marketing', '2024-05-30 11:00:00', '2024-05-30 13:00:00', 'Presencial', 5, 5);
-        `
-        ,
-
-    reunioesHibridas:`
-        INSERT INTO reuniao (titulo, descricao, data_inicio, data_final, tipo, sala_presencial_id, sala_online_id, organizador_id)
-            VALUES
-            ('Reunião Hibrido 1', 'Discussão sobre o novo projeto', '2024-05-21 09:00:00', '2024-05-21 11:00:00', 'Hibrido', 1, 1, 1),
-            ('Reunião Hibrido 2', 'Apresentação de resultados do trimestre', '2024-05-23 14:00:00', '2024-05-23 16:00:00', 'Hibrido', 2, 2, 2),
-            ('Reunião Hibrido 3', 'Planejamento estratégico para o próximo ano', '2024-05-26 10:00:00', '2024-05-26 12:00:00', 'Hibrido', 3, 3, 3),
-            ('Reunião Hibrido 4', 'Avaliação de desempenho dos colaboradores', '2024-05-29 15:00:00', '2024-05-29 17:00:00', 'Hibrido', 4, 4, 4),
-            ('Reunião Hibrido 5', 'Brainstorming de ideias para campanha de marketing', '2024-05-31 11:00:00', '2024-05-31 13:00:00', 'Hibrido', 5, 5, 5);
-        `
-        ,
-
-    reunioesOnline:`
-    INSERT INTO reuniao (titulo, descricao, data_inicio, data_final, tipo, sala_online_id, organizador_id)
-        VALUES
-        ('Reunião Online 1', 'Discussão sobre o novo projeto', '2024-05-21 09:00:00', '2024-05-21 11:00:00', 'Online', 1, 1),
-        ('Reunião Online 2', 'Apresentação de resultados do trimestre', '2024-05-23 14:00:00', '2024-05-23 16:00:00', 'Online', 2, 2),
-        ('Reunião Online 3', 'Planejamento estratégico para o próximo ano', '2024-05-26 10:00:00', '2024-05-26 12:00:00', 'Online', 3, 3),
-        ('Reunião Online 4', 'Avaliação de desempenho dos colaboradores', '2024-05-29 15:00:00', '2024-05-29 17:00:00', 'Online', 4, 4),
-        ('Reunião Online 5', 'Brainstorming de ideias para campanha de marketing', '2024-05-31 11:00:00', '2024-05-31 13:00:00', 'Online', 5, 5);
+            ("usuario12", "user12@gmail.com", "123456789", 1, "1", 0, "https://images.unsplash.com/photo-1573497019418-b400bb3ab074?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+    `,
+    produtos: `
+        INSERT INTO produto (id, name, image, description, purchasePrice, salePrice, stock, minStock, category, stockLocation, status) VALUES
+            (1, "Kit Amaciante", "/src/assets/img/produtos/Combo/KitAmaciante.png", "Kit Amaciante Ypê Concentrado Alquimia Liberdade + Inspiração 500ml Cada 50% de Desconto na 2a Unid", 6.00, 12.25, 58, 10, "Combo", "Aisle 3", true),
+            (2, "Kit Minuano", "/src/assets/img/produtos/Combo/KitMinuano.png", "Kit Lava Roupas Pó Roxo 1,6Kg e Amaciante Rosa 2L", 12.00, 24.22, 60, 10, "Combo", "Aisle 3", true),
+            (3, "Kit Natura", "/src/assets/img/produtos/Combo/KitNatura.png", "O Presente Natura Tododia Macadâmia é uma verdadeira demonstração de carinho e afeto. Ele traz um ritual completo de limpeza, hidratação e perfumação na fragrância cremosa e confortável de Tododia Macadâmia. Contém itens essenciais para o cuidado de Tododia, incluindo o Sabonete em Barra Puro Vegetal, o Creme Desodorante Nutritivo para o Corpo e o Body Splash Desodorante Colônia. Acompanha uma sacola especial de presente. Conteúdo: 1 Body splash desodorante colônia 200 ml. 1 Creme desodorante nutritivo para o corpo 400 ml. 1 Caixa de sabonetes em barra puro vegetal com 5 unidades de 90 g cada. 1 Sacola especial de presente M.", 50.00, 114.90, 12, 5, "Combo", "Aisle 4", true),
+            (4, "COCA garrafa", "/src/assets/img/produtos/Bebida/Coca.png", "É hora de celebrar a união de duas potências icônicas dos quadrinhos e dos refrigerantes: Marvel e Coca-Cola. Desfrute da magia e de todo o sabor de Coca-Cola Original 220ml em uma colaboração épica Mergulhe em um mundo de heróis e vilões enquanto desfruta da refrescância única da Coca-Cola Original 220ml. Esta edição limitada traz uma experiência totalmente nova para os fãs do Universo Marvel.", 1.00, 1.99, 200, 50, "Bebida", "Aisle 1", true),
+            (5, "FANTA lata", "/src/assets/img/produtos/Bebida/Fanta.png", "A Fanta é um refrigerante popular conhecido por seu sabor doce e frutado, geralmente disponível em vários sabores, sendo o mais comum o de laranja.", 1.20, 2.25, 300, 50, "Bebida", "Aisle 1", true),
+            (6, "Heineken garrafa", "/src/assets/img/produtos/Bebida/Heineken.png", "Heineken é uma cerveja lager Puro Malte, refrescante e de cor amarelo-dourado, produzida com ingredientes 100% naturais: água, malte e lúpulo. Durante o processo de fermentação da Heineken, a exclusiva Levedura A é responsável pelo sabor característico e bem equilibrado, com notas frutadas sutis. A cerveja é fabricada em tanques horizontais para mais sabor e consistência. É por isso que nenhuma outra cerveja tem o gosto de Heineken. Na icônica versão em Long Neck de 330ml (6 unidades), ela possui teor alcoólico de 5% e a temperatura ideal de consumo é de 3º a 5º. A Heineken foi criada para ser a melhor cerveja do mundo desde 1873. Algumas coisas são boas demais para mudar! A lager é mais leve e combina bem com hambúrguer, comida mexicana, queijos e castanhas.", 3.50, 6.79, 600, 100, "Bebida", "Aisle 1", true),
+            (7, "Batata congelada", "/src/assets/img/produtos/Porcao/BatataFritaCongelada.png", "A batata corte fino 7mm McCain é congelada, pré frita e já com corte em formato palito com espessura de 7mm.", 15.00, 30.56, 68, 20, "Porção", "Aisle 2", true),
+            (8, "Asinha Frango", "/src/assets/img/produtos/Porcao/AsinhaFrango.png", "Coxinha da Asa de Frango Congelada, da marca Sadia, em embalagem com 1 quilo. Parte da linha Bio, provém de aves criadas sem o uso de antibióticos e com alimentação 100% vegetal, o que auxilia em sua qualidade. O corte, que é retirado da parte superior da asa do frango, possui textura macia e conta com osso. Com pele e sabor delicado, traz equilíbrio entre a quantidade de carne e gordura. Quanto às possibilidades de preparo, a coxinha da asa pode ser cozida, grelhada, assada ou frita, adaptando-se aos mais variados gostos e estilos de culinária. É uma opção perfeita para churrascos, petiscos, pratos principais ou até mesmo para compor receitas mais elaboradas, como ensopados e assados. Fonte de proteínas, também é rica em vitaminas do complexo B e em minerais diversos, como fósforo, por exemplo. Sua porção de 100 gramas possui, aproximadamente, valor energético de 128 kcal, 14 gramas de proteínas, 5,4 gramas de gorduras totais e 58 miligramas de sódio. Para conservar o alimento, é recomendado mantê-lo congelado, em temperatura de -12oC ou mais frio. Dessa forma, são preservadas as características do produto e mantida sua segurança alimentar.", 13.00, 27.25, 20, 5, "Porção", "Aisle 2", true),
+            (9, "Bolinho Bacalhau", "/src/assets/img/produtos/Porcao/BolinhoBacalhau.png", "Os Bolinhos com Bacalhau Seara são feitos com bacalhau nobre, seguindo a tradicional receita portuguesa. Práticos para fazer no dia a dia, seja no almoço ou no jantar, ou até mesmo servir como aperitivo naquelas ocasiões especiais. Além de ser saboroso e irresistível, é muito fácil de preparar e fica pronto em poucos minutos, inclusive você também pode fazer o bolinho de bacalhau Frito ou assado, é uma delícia!", 16.00, 32.50, 20, 5, "Porção", "Aisle 2", true);
     `
-    ,
-    anexo:`
-        INSERT INTO anexo (reuniao_id, anexo) 
-            VALUES 
-            (1, 'anexo1.pdf'),
-            (2, 'anexo2.pdf'),
-            (3, 'anexo3.pdf'),
-            (4, 'anexo4.pdf'),
-            (5, 'anexo5.pdf'),
-            (6, 'anexo6.pdf'),
-            (7, 'anexo7.pdf'),
-            (8, 'anexo8.pdf'),
-            (9, 'anexo9.pdf'),
-            (10, 'anexo10.pdf'),
-            (11, 'anexo11.pdf'),
-            (12, 'anexo12.pdf'),
-            (13, 'anexo13.pdf'),
-            (14, 'anexo14.pdf'),
-            (15, 'anexo15.pdf');
-        `
-        ,
-    observacao: `
-        INSERT INTO observacao (reuniao_id, observacao) 
-        VALUES
-            (1, 'Observação 1'), 
-            (1, 'Observação 2'), 
-            (1, 'Observação 3'), 
-            (1, 'Observação 4'),
-            (2, 'Observação 1'), 
-            (2, 'Observação 2'), 
-            (2, 'Observação 3'), 
-            (2, 'Observação 4'),
-            (3, 'Observação 1'), 
-            (3, 'Observação 2'), 
-            (3, 'Observação 3'), 
-            (3, 'Observação 4'),
-            (4, 'Observação 1'), 
-            (4, 'Observação 2'), 
-            (4, 'Observação 3'), 
-            (4, 'Observação 4'),
-            (5, 'Observação 1'), 
-            (5, 'Observação 2'), 
-            (5, 'Observação 3'), 
-            (5, 'Observação 4'),
-            (6, 'Observação 1'), 
-            (6, 'Observação 2'), 
-            (6, 'Observação 3'), 
-            (6, 'Observação 4'),
-            (7, 'Observação 1'), 
-            (7, 'Observação 2'), 
-            (7, 'Observação 3'), 
-            (7, 'Observação 4'),
-            (8, 'Observação 1'), 
-            (8, 'Observação 2'), 
-            (8, 'Observação 3'), 
-            (8, 'Observação 4'),
-            (9, 'Observação 1'), 
-            (9, 'Observação 2'), 
-            (9, 'Observação 3'), 
-            (9, 'Observação 4'),
-            (10, 'Observação 1'),
-            (10, 'Observação 2'), 
-            (10, 'Observação 3'),
-            (10, 'Observação 4'),
-            (11, 'Observação 1'),
-            (11, 'Observação 2'),
-            (11, 'Observação 3'),
-            (11, 'Observação 4'),
-            (12, 'Observação 1'),
-            (12, 'Observação 2'),
-            (12, 'Observação 3'),
-            (12, 'Observação 4'),
-            (13, 'Observação 1'),
-            (13, 'Observação 2'),
-            (13, 'Observação 3'),
-            (13, 'Observação 4'),
-            (14, 'Observação 1'),
-            (14, 'Observação 2'),
-            (14, 'Observação 3'),
-            (14, 'Observação 4'),
-            (15, 'Observação 1'),
-            (15, 'Observação 2'),
-            (15, 'Observação 3'),
-            (15, 'Observação 4');
-    `
-    ,
-    participantes: `
-    INSERT INTO participante_reuniao (usuario_id, reuniao_id)
-        VALUES
-            (1, 1), (2, 1), (3, 1), (1, 2), (2, 2), (1, 3), (4, 3), (5, 3), (1, 4), 
-            (2, 4), (1, 5), (2, 5), (3, 5), (1, 6), (1, 7), (2, 7), (3, 7), (1, 8),
-            (2, 8), (1, 9), (2, 9), (1, 10), (2, 10),(3, 10), (1, 11), (2, 11), (1, 12),
-            (2, 12), (1, 13), (2, 13), (3, 13), (1, 14), (2, 14), (1, 15), (2, 15), (3, 15);
-            `
-    ,
-    preferencias_usuario:`
-        INSERT INTO preferencias_usuario (usuario_id, tema, idioma, notificacoes_ativadas, notificacoes_email, notificacoes_sms, notificacoes_whatsapp)
-            VALUES
-            (1, 'Dark', 'Português', true, true, false, true),
-            (2, 'Light', 'Inglês', true, true, true, false),
-            (3, 'Compatibilidade', 'Espanhol', false, false, false, false),
-            (4, 'Dark', 'Português', true, true, true, true),
-            (5, 'Light', 'Português', true, false, true, true);
-        `
+};
 
-    }
 module.exports = initialInserts;

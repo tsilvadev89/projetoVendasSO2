@@ -8,12 +8,12 @@ const con = mysql.createConnection({
     password: "fatec",
 });
 
-con.query("CREATE DATABASE IF NOT EXISTS api4", function (err, result) {
+con.query("CREATE DATABASE IF NOT EXISTS so2", function (err, result) {
     if (err) throw err;
 
-    con.query("USE api4", function (err, result) {
+    con.query("USE so2", function (err, result) {
         if (err) {
-            console.error("Erro ao selecionar o banco de dados 'api4':", err);
+            console.error("Erro ao selecionar o banco de dados 'so2':", err);
             con.end();
             return;
         }
@@ -21,7 +21,7 @@ con.query("CREATE DATABASE IF NOT EXISTS api4", function (err, result) {
         con.query("SHOW TABLES", function (err, result) {
             if (err) throw err;
 
-            const tables = result.map(row => row['Tables_in_api4']);
+            const tables = result.map(row => row['Tables_in_so2']);
 
             if (tables.length === 0) {
                 
@@ -44,7 +44,7 @@ con.query("CREATE DATABASE IF NOT EXISTS api4", function (err, result) {
                 });
                 con.end();
             } else {
-                console.log("O banco de dados 'api4' já possui tabelas");
+                console.log("O banco de dados 'so2' já possui tabelas");
                 con.end();
             }
         });

@@ -10,10 +10,10 @@ con.connect(function(err) {
 	if (err) throw err;
 	console.log("Conectado");
 	
-	var sql = "DROP DATABASE api4";
+	var sql = "DROP DATABASE so2";
 	con.query(sql, function (err, result) {
 		if (err) throw err;
-		console.log("Database api4 deletada");
+		console.log("Database so2 deletada");
 		
 		con.end();
 	});	

@@ -11,17 +11,11 @@ const http = require('http');
 
 // IMPORTAÇÕES DE ROTAS DO BACKEND
 const userRoutes = require('./routes/userRoute');
-const salasPresencialRoutes = require('./routes/salaPresencialRoute');
-const salasOnlineRoutes = require('./routes/salaOnlineRoute');
-const reunioesRoutes = require('./routes/reuniaoRoute');
-const participanteRoutes = require('./routes/participanteRoute');
 const anexoRoutes = require('./routes/anexoRoute');
-const observacaoRoutes = require('./routes/observacaoRoute');
-const notificacaoRoutes = require('./routes/notificacaoRoute');
 const loginRoutes = require('./routes/loginRoute');
 const logoutRoutes = require('./routes/logoutRoute');
 const cookieRoutes = require('./routes/cookieRoute');
-const zoomRoutes = require('./routes/zoomRoute');
+const productRoutes = require('./routes/productRoute');
 
 // Configurações do servidor
 const app = express();
@@ -61,17 +55,11 @@ app.use(session({
 
 // Rotas do backend
 app.use('/us', userRoutes);
-app.use('/salapresencial', salasPresencialRoutes);
-app.use('/salaonline', salasOnlineRoutes);
-app.use('/reuniao', reunioesRoutes);
-app.use('/participante', participanteRoutes);
 app.use('/anexo', anexoRoutes);
-app.use('/observacao', observacaoRoutes);
-app.use('/notificacao', notificacaoRoutes);
 app.use('/login', loginRoutes);
 app.use('/logout', logoutRoutes);
 app.use('/ck', cookieRoutes);
-app.use('/zoom', zoomRoutes);
+app.use('/product', productRoutes);
 
 server.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`)})
