@@ -1,16 +1,18 @@
-import React from 'react';
+// src/components/Login.tsx
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, TextField, Button, Typography, Stack, Tooltip, Alert } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useState } from 'react';
 import { AccountCircle, Lock, Login as LoginIcon } from '@mui/icons-material';
 import logo from '../assets/img/logo.png';
+import { fetchUsers, validateUser } from '../api/crudUser';
+import { User } from '../types/types';
 
 const schema = z.object({
-  email: z.string().email({ message: "Email inválido" }),
-  password: z.string().min(4, { message: "A senha deve ter no mínimo 4 caracteres" }),
+  email: z.string().email({ message: 'Email inválido' }),
+  password: z.string().min(4, { message: 'A senha deve ter no mínimo 4 caracteres' }),
 });
 
 type LoginFormInputs = z.infer<typeof schema>;
@@ -21,10 +23,25 @@ const Login: React.FC = () => {
     resolver: zodResolver(schema),
   });
 
+  const [users, setUsers] = useState<User[]>([]);
   const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
+  useEffect(() => {
+    const loadUsers = async () => {
+      try {
+        const usersData = await fetchUsers();
+        setUsers(usersData);
+      } catch (error) {
+        setNotification({ type: 'error', message: 'Erro ao carregar usuários' });
+      }
+    };
+
+    loadUsers();
+  }, []);
+
   const onSubmit = (data: LoginFormInputs) => {
-    if (data.email === 'admin@admin.com' && data.password === '123456789') {
+    const user = validateUser(users, data.email, data.password);
+    if (user) {
       setNotification({ type: 'success', message: 'Login bem-sucedido!' });
       setTimeout(() => {
         navigate('/home');
@@ -37,7 +54,7 @@ const Login: React.FC = () => {
   return (
     <Box
       sx={{
-        minWidth:'100vw',
+        minWidth: '100vw',
         minHeight: '100vh',
         display: 'flex',
         justifyContent: 'center',
@@ -46,7 +63,6 @@ const Login: React.FC = () => {
     >
       <Stack
         sx={{
-          
           background: 'rgba(255, 255, 255, 0.1)',
           backdropFilter: 'blur(10px)',
           borderRadius: 2,

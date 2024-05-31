@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Grid, Typography, TextField, Box, Button, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ItemCard from './ItemCard';
-import { fetchItems } from '../../api/db';
+import { fetchItems } from '../../api/crudUser';
 import { Product } from '../../types/types';
 import AddIcon from '@mui/icons-material/Add';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
