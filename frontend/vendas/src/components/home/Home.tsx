@@ -48,7 +48,7 @@ const Home: React.FC = () => {
   return (
     <Box sx={{ minHeight: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Container maxWidth="lg" sx={{ margin: '0 auto', display: 'flex', flexDirection: 'column' }}>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h4" gutterBottom sx={{marginTop:4}}>
           Itens Disponíveis em Estoque
         </Typography>
         <Box mb={3} display="flex" justifyContent="space-between" alignItems="center">

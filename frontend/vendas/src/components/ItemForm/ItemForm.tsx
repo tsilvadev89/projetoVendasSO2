@@ -1,42 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Box, Typography, Stack, Tabs, Tab, Button, Snackbar, Alert, Badge } from '@mui/material';
+import { Container, Box, Typography, Stack, Tabs, Tab, Button, Badge, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { TabPanel, TabContext } from '@mui/lab';
 import BasicInfo from './BasicInfo';
 import PricingStockInfo from './PricingStockInfo';
 import CategoryLocationInfo from './CategoryLocationInfo';
 import { createProduct, getProductById, updateProduct, deleteProduct } from '../../api/crudProducts';
 import { Product } from '../../types/types';
-
-const schema = z.object({
-  id: z.number().min(0, { message: "ID é obrigatório" }),
-  name: z.string().min(1, { message: "Nome é obrigatório" }),
-  image: z.string().min(0,{ message: "URL da imagem inválida" }),
-  description: z.string().optional(),
-  purchasePrice: z.number().min(0, { message: "Valor de compra inválido" }),
-  salePrice: z.number().min(0, { message: "Valor de venda inválido" }),
-  stock: z.number().min(0, { message: "Quantidade em estoque inválida" }),
-  minStock: z.number().min(0, { message: "Estoque mínimo inválido" }),
-  category: z.enum(["Porção", "Bebida", "Combo", "Diversos"]),
-  stockLocation: z.string().optional(),
-  generalInfo: z.string().optional(),
-  status: z.boolean().optional()
-});
-
-type ItemFormInputs = z.infer<typeof schema>;
+import { useNotification } from '../../context/NotificationContext';
 
 const ItemForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { control, handleSubmit, setValue, formState: { errors, isValid } } = useForm<ItemFormInputs>({
-    resolver: zodResolver(schema),
+  const { control, handleSubmit, setValue, formState: { errors, isValid } } = useForm<Product>({
     mode: 'onChange',
   });
+  const { setNotification } = useNotification();
   const [currentTab, setCurrentTab] = useState('1');
-  const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | undefined>();
+  const [purchasePrice, setPurchasePrice] = useState<number>(0);
+  const [salePrice, setSalePrice] = useState<number>(0);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -44,8 +28,10 @@ const ItemForm: React.FC = () => {
         const product = await getProductById(Number(id));
         if (product) {
           for (const key in product) {
-            setValue(key as keyof ItemFormInputs, product[key as keyof Product]);
+            setValue(key as keyof Product, product[key as keyof Product]);
           }
+          setPurchasePrice(product.purchasePrice);
+          setSalePrice(product.salePrice);
         }
       };
       fetchProduct();
@@ -56,7 +42,7 @@ const ItemForm: React.FC = () => {
     setCurrentTab(newValue);
   };
 
-  const onSubmit = async (data: ItemFormInputs) => {
+  const onSubmit = async (data: Product) => {
     if (!isValid) {
       setNotification({ type: 'error', message: 'Validação falhou. Por favor, verifique os campos.' });
       return;
@@ -64,11 +50,13 @@ const ItemForm: React.FC = () => {
 
     try {
       if (id) {
-        await updateProduct(Number(id), data as Product);
+        await updateProduct(Number(id), data);
         setNotification({ type: 'success', message: `Produto ${data.name} atualizado com sucesso` });
+        navigate('/home');
       } else {
-        await createProduct(data as Product);
+        await createProduct(data);
         setNotification({ type: 'success', message: `Produto ${data.name} cadastrado com sucesso` });
+        navigate('/home');
       }
     } catch (error) {
       setNotification({ type: 'error', message: 'Falha ao salvar o produto' });
@@ -80,18 +68,23 @@ const ItemForm: React.FC = () => {
       if (id) {
         await deleteProduct(Number(id));
         setNotification({ type: 'success', message: `Produto deletado com sucesso` });
+        navigate('/home');
       }
     } catch (error) {
       setNotification({ type: 'error', message: 'Falha ao deletar o produto' });
     }
   };
 
-  const handleClose = () => {
-    setNotification(undefined);
-  };
-
   const handleCancel = () => {
     navigate('/home');
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const getTabLabel = (label: string, errorKey: string) => {
@@ -140,7 +133,14 @@ const ItemForm: React.FC = () => {
                 <BasicInfo control={control} errors={errors} />
               </TabPanel>
               <TabPanel value="2">
-                <PricingStockInfo control={control} errors={errors} />
+                <PricingStockInfo
+                  control={control}
+                  errors={errors}
+                  initialPurchasePrice={purchasePrice}
+                  initialSalePrice={salePrice}
+                  onPurchasePriceChange={setPurchasePrice}
+                  onSalePriceChange={setSalePrice}
+                />
               </TabPanel>
               <TabPanel value="3">
                 <CategoryLocationInfo control={control} errors={errors} />
@@ -154,7 +154,7 @@ const ItemForm: React.FC = () => {
                     variant="contained"
                     color="secondary"
                     sx={{ ml: 2 }}
-                    onClick={handleDelete}
+                    onClick={handleClickOpen}
                   >
                     Deletar Produto
                   </Button>
@@ -171,18 +171,34 @@ const ItemForm: React.FC = () => {
             </form>
           </TabContext>
         </Stack>
-        <Snackbar
-          open={!!notification}
-          autoHideDuration={6000}
+        <Dialog
+          open={open}
           onClose={handleClose}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
         >
-          {notification && (
-            <Alert onClose={handleClose} severity={notification.type} sx={{ width: '100%' }}>
-              {notification.message}
-            </Alert>
-          )}
-        </Snackbar>
+          <DialogTitle id="alert-dialog-title">{"Confirmar Deleção"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Tem certeza de que deseja deletar este produto? Esta ação não pode ser desfeita.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancelar
+            </Button>
+            <Button
+              onClick={() => {
+                handleClose();
+                handleDelete();
+              }}
+              color="secondary"
+              autoFocus
+            >
+              Deletar
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </Box>
   );
