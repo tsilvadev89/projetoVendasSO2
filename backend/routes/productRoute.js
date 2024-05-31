@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controller/user');
-
-// Rotas CRUD para usuários
+const productController = require('../controller/product');
 
 router.post('/', async (req, res) => {
     try {
-        const newUser = await userController.createUser(req.body);
-        res.status(201).json(newUser);
+        const newProduct = await productController.createProduct(req.body);
+        res.status(201).json(newProduct);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -15,8 +13,8 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
     try {
-        const users = await userController.getAllUsers();
-        res.json(users);
+        const products = await productController.getAllProducts();
+        res.json(products);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -24,18 +22,17 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const user = await userController.getUserById(req.params.id);
-        res.json(user);
+        const product = await productController.getProductById(req.params.id);
+        res.json(product);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
 router.put('/:id', async (req, res) => {
-    console.log('UpdateUser',req.params.id, req.body)
     try {
-        const updatedUser = await userController.updateUserById(req.params.id, req.body);
-        res.json(updatedUser);
+        const updatedProduct = await productController.updateProductById(req.params.id, req.body);
+        res.json(updatedProduct);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -43,7 +40,7 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     try {
-        const result = await userController.deleteUserById(req.params.id);
+        const result = await productController.deleteProductById(req.params.id);
         res.json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });

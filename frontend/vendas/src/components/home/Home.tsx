@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Container, Grid, Typography, TextField, Box, Button, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ItemCard from './ItemCard';
-import { fetchItems } from '../../api/crudUser';
 import { Product } from '../../types/types';
 import AddIcon from '@mui/icons-material/Add';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import axios from 'axios';
+import { getProducts } from '../../api/crudProducts';
 
 const Home: React.FC = () => {
   const [items, setItems] = useState<Product[]>([]);
@@ -13,20 +14,35 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const items = fetchItems();
-    setItems(items);
+    const fetchItems = async () => {
+      try {
+        const items = await getProducts();
+        console.log(items)
+        setItems(items);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+      }
+    };
+
+    fetchItems();
   }, []);
 
-  const filteredItems = items.filter(item =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredItems = items.filter(item => 
+    item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleCreateClick = () => {
     navigate('/create');
   };
 
-  const handleLogoutClick = () => {
-    navigate('/');
+  const handleLogout = () => {
+    axios.post('http://localhost:3000/logout')
+      .then(() => {
+        navigate('/');
+      })
+      .catch(error => {
+        console.error('Erro ao fazer logout:', error);
+      });
   };
 
   return (
@@ -48,7 +64,7 @@ const Home: React.FC = () => {
             <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleCreateClick}>
               ADD
             </Button>
-            <Button variant="contained" color="error" startIcon={<ExitToAppIcon />} onClick={handleLogoutClick}>
+            <Button variant="contained" color="error" startIcon={<ExitToAppIcon />} onClick={handleLogout}>
               Sair
             </Button>
           </Stack>

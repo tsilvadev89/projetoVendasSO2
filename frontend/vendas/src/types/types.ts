@@ -12,6 +12,7 @@ export interface Product {
     generalInfo?: string;
     status?: boolean;
   }
+  
   export interface User {
     id_usuario: number;
     nome_usuario: string;

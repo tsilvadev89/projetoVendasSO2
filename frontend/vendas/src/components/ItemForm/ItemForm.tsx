@@ -14,11 +14,11 @@ import { Product } from '../../types/types';
 const schema = z.object({
   id: z.number().min(0, { message: "ID é obrigatório" }),
   name: z.string().min(1, { message: "Nome é obrigatório" }),
-  image: z.string().url({ message: "URL da imagem inválida" }),
+  image: z.string().min(0,{ message: "URL da imagem inválida" }),
   description: z.string().optional(),
   purchasePrice: z.number().min(0, { message: "Valor de compra inválido" }),
   salePrice: z.number().min(0, { message: "Valor de venda inválido" }),
-  stock: z.number().min(0, { message: "Quantidade em estoque inválido" }),
+  stock: z.number().min(0, { message: "Quantidade em estoque inválida" }),
   minStock: z.number().min(0, { message: "Estoque mínimo inválido" }),
   category: z.enum(["Porção", "Bebida", "Combo", "Diversos"]),
   stockLocation: z.string().optional(),

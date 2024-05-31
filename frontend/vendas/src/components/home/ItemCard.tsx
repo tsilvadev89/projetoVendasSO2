@@ -57,6 +57,8 @@ const ItemCard: React.FC<ItemCardProps> = ({ id, name, image, description, saleP
     navigate(`/edit/${id}`);
   };
 
+  const formattedSalePrice = typeof salePrice === 'number' ? salePrice.toFixed(2) : 'N/A';
+
   return (
     <Card
       sx={{
@@ -128,7 +130,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ id, name, image, description, saleP
             <Box display="flex" alignItems="center" mb={2}>
               <MonetizationOnIcon sx={{ mr: 1 }} />
               <Typography variant="caption" component="div" color="text.primary">
-                R${salePrice.toFixed(2)}
+                R${formattedSalePrice}
               </Typography>
             </Box>
             <Box display="flex" alignItems="center" mb={2}>

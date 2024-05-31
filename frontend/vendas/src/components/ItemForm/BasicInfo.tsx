@@ -22,6 +22,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ control, errors }) => {
               variant="outlined"
               type="number"
               fullWidth
+              disabled
               error={!!errors.id}
               value={field.value}
               onChange={(e) => field.onChange(parseInt(e.target.value))}

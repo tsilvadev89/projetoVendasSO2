@@ -1,43 +1,64 @@
-import { Product } from "../types/types";
 
+import axios from 'axios';
+import { Product } from '../types/types';
 
-const apiUrl = 'https://api.example.com/products'; // Substitua pela URL da sua API
+const apiUrl = 'http://localhost:3000/product';
 
-export const createProduct = async (product: Product) => {
-  const response = await fetch(apiUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(product),
-  });
-  return response.json();
+export const createProduct = async (product: Product): Promise<Product> => {
+  try {
+    const response = await axios.post(apiUrl, product, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar o produto:', error);
+    throw error;
+  }
 };
 
-export const updateProduct = async (id: number, product: Product) => {
-  const response = await fetch(`${apiUrl}/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(product),
-  });
-  return response.json();
+export const updateProduct = async (id: number, product: Product): Promise<Product> => {
+  try {
+    const response = await axios.put(`${apiUrl}/${id}`, product, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao atualizar o produto:', error);
+    throw error;
+  }
 };
 
-export const deleteProduct = async (id: number) => {
-  const response = await fetch(`${apiUrl}/${id}`, {
-    method: 'DELETE',
-  });
-  return response.json();
+export const deleteProduct = async (id: number): Promise<void> => {
+  try {
+    const response = await axios.delete(`${apiUrl}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao deletar o produto:', error);
+    throw error;
+  }
 };
 
-export const getProductById = async (id: number) => {
-  const response = await fetch(`${apiUrl}/${id}`);
-  return response.json();
+export const getProductById = async (id: number): Promise<Product> => {
+  try {
+    const response = await axios.get(`${apiUrl}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao obter o produto:', error);
+    throw error;
+  }
 };
 
-export const getProducts = async () => {
-  const response = await fetch(apiUrl);
-  return response.json();
+export const getProducts = async (): Promise<Product[]> => {
+  try {
+    const response = await axios.get(apiUrl);
+/*     console.log(response); */
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao obter os produtos:', error);
+    throw error;
+  }
 };
