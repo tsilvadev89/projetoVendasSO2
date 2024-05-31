@@ -43,10 +43,6 @@ const PricingStockInfo: React.FC<PricingStockInfoProps> = ({
     onSalePriceChange(value);
   };
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
-  };
-
   if (loading || purchasePrice === null || salePrice === null) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100%">
@@ -71,7 +67,10 @@ const PricingStockInfo: React.FC<PricingStockInfoProps> = ({
               error={!!errors.purchasePrice}
               helperText={errors.purchasePrice ? errors.purchasePrice.message : ''}
               value={purchasePrice}
-              onChange={handlePurchasePriceChange}
+              onChange={(e) => {
+                field.onChange(e);
+                handlePurchasePriceChange(e);
+              }}
               type="number"
               InputProps={{
                 inputProps: {
@@ -97,7 +96,10 @@ const PricingStockInfo: React.FC<PricingStockInfoProps> = ({
               error={!!errors.salePrice}
               helperText={errors.salePrice ? errors.salePrice.message : ''}
               value={salePrice}
-              onChange={handleSalePriceChange}
+              onChange={(e) => {
+                field.onChange(e);
+                handleSalePriceChange(e);
+              }}
               type="number"
               InputProps={{
                 inputProps: {

@@ -1,10 +1,12 @@
-const mysql = require('mysql2');
+const mariadb = require('mariadb');
 
-const con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "fatec",
-    database: "so2"
+const con = mariadb.createPool({
+  host: "localhost",
+  user: "root",
+  password: "fatec",
+  database: "so2",
+  port: 3308,
+  connectionLimit: 5
 });
 
 module.exports = con;

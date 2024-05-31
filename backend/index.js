@@ -11,7 +11,6 @@ const http = require('http');
 
 // IMPORTAÇÕES DE ROTAS DO BACKEND
 const userRoutes = require('./routes/userRoute');
-const anexoRoutes = require('./routes/anexoRoute');
 const loginRoutes = require('./routes/loginRoute');
 const logoutRoutes = require('./routes/logoutRoute');
 const cookieRoutes = require('./routes/cookieRoute');
@@ -55,7 +54,6 @@ app.use(session({
 
 // Rotas do backend
 app.use('/us', userRoutes);
-app.use('/anexo', anexoRoutes);
 app.use('/login', loginRoutes);
 app.use('/logout', logoutRoutes);
 app.use('/ck', cookieRoutes);

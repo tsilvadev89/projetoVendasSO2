@@ -1,52 +1,65 @@
-const mysql = require('mysql2');
+const mariadb = require('mariadb');
 const createTableQueries = require('./dbDefault');
 const initialInserts = require('./dbInsert');
 
-const con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "fatec",
+const pool = mariadb.createPool({
+  host: "localhost",
+  user: "root",
+  password: "fatec",
+  port: 3308,
+  connectionLimit: 5
 });
 
-con.query("CREATE DATABASE IF NOT EXISTS so2", function (err, result) {
-    if (err) throw err;
+async function initializeDatabase() {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    console.log("Conectado");
 
-    con.query("USE so2", function (err, result) {
-        if (err) {
-            console.error("Erro ao selecionar o banco de dados 'so2':", err);
-            con.end();
-            return;
+    // Criar o banco de dados se não existir
+    await conn.query("CREATE DATABASE IF NOT EXISTS so2");
+    await conn.query("USE so2");
+
+    // Verificar se há tabelas no banco de dados
+    const rows = await conn.query("SHOW TABLES");
+    const tables = rows.map(row => Object.values(row)[0]);
+
+    if (tables.length === 0) {
+      // Criar tabelas conforme o padrão
+      for (const table in createTableQueries) {
+        if (createTableQueries.hasOwnProperty(table)) {
+          await conn.query(createTableQueries[table]);
+          console.log(`Tabela ${table} criada com sucesso`);
         }
+      }
 
-        con.query("SHOW TABLES", function (err, result) {
-            if (err) throw err;
+      console.log("Estrutura padrão do banco de dados criada");
 
-            const tables = result.map(row => row['Tables_in_so2']);
+      // Popular banco com inserts iniciais
+      for (const table in initialInserts) {
+        if (initialInserts.hasOwnProperty(table)) {
+          await conn.query(initialInserts[table]);
+          console.log(`Insert ${table} criado com sucesso`);
+        }
+      }
+    } else {
+      console.log("O banco de dados 'so2' já possui tabelas");
+    }
+  } catch (err) {
+    console.error("Erro:", err);
+  } finally {
+    if (conn) {
+      try {
+        await conn.end();
+        console.log("Conexão encerrada");
+      } catch (err) {
+        console.error("Erro ao encerrar a conexão:", err);
+      }
+    }
+  }
+}
 
-            if (tables.length === 0) {
-                
-                Object.keys(createTableQueries).forEach(table => {
-                    con.query(createTableQueries[table], function (err, result) {
-                        if (err) throw err;
-                        console.log(`Tabela ${table} criada com sucesso`);
-                    });
-                });
-
-                console.log("Estrutura padrão do banco de dados criada");
-
-
-                // AGORA VAMOS POPULAR BANCO
-                Object.keys(initialInserts).forEach(table => {
-                    con.query(initialInserts[table], function (err, result) {
-                        if (err) throw err;
-                        console.log(`Insert ${table} criado com sucesso`);
-                    });
-                });
-                con.end();
-            } else {
-                console.log("O banco de dados 'so2' já possui tabelas");
-                con.end();
-            }
-        });
-    });
+initializeDatabase().then(() => process.exit()).catch(err => {
+  console.error("Erro na inicialização do banco de dados:", err);
+  process.exit(1);
 });

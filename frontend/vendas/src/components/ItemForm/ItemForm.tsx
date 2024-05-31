@@ -50,11 +50,11 @@ const ItemForm: React.FC = () => {
 
     try {
       if (id) {
-        await updateProduct(Number(id), data);
+        await updateProduct(Number(id), { ...data, purchasePrice, salePrice });
         setNotification({ type: 'success', message: `Produto ${data.name} atualizado com sucesso` });
         navigate('/home');
       } else {
-        await createProduct(data);
+        await createProduct({ ...data, purchasePrice, salePrice });
         setNotification({ type: 'success', message: `Produto ${data.name} cadastrado com sucesso` });
         navigate('/home');
       }

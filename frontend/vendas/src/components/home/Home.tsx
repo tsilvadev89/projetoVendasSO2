@@ -17,7 +17,7 @@ const Home: React.FC = () => {
     const fetchItems = async () => {
       try {
         const items = await getProducts();
-        console.log(items)
+      /*   console.log(items) */
         setItems(items);
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
