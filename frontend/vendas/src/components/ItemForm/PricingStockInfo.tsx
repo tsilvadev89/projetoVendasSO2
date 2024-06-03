@@ -31,13 +31,13 @@ const PricingStockInfo: React.FC<PricingStockInfoProps> = ({
     }
   }, [initialPurchasePrice, initialSalePrice]);
 
-  const handlePurchasePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePurchasePriceChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = parseFloat(e.target.value);
     setPurchasePrice(value);
     onPurchasePriceChange(value);
   };
 
-  const handleSalePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSalePriceChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = parseFloat(e.target.value);
     setSalePrice(value);
     onSalePriceChange(value);
