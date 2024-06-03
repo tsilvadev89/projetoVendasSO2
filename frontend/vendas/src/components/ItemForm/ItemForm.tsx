@@ -38,7 +38,7 @@ const ItemForm: React.FC = () => {
     }
   }, [id, setValue]);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);
   };
 

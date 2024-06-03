@@ -1,7 +1,6 @@
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import { Grid, TextField, MenuItem, FormControlLabel, Switch } from '@mui/material';
-import { Product } from './types';
 
 interface CategoryLocationInfoProps {
   control: any;
