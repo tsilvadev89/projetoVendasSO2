@@ -18,13 +18,13 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: '54.196.168.75', // ENDEREÇO PUBLICO DA APLICAÇÃO
+        target: '54.234.79.240', // ENDEREÇO PUBLICO DA APLICAÇÃO
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },
-  build: {
+/*   build: {
     outDir: '/var/www/html', // Define o diretório de saída para a pasta do Apache
-  },
+  }, */
 });
