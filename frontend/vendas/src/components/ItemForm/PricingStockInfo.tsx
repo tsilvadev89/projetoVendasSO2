@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
-import { Grid, TextField, CircularProgress, Box } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 interface PricingStockInfoProps {
   control: any;

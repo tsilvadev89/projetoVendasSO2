@@ -1,7 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Box, Typography, Stack, Tabs, Tab, Button, Badge, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Button from '@mui/material/Button';
+import Badge from '@mui/material/Badge';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import { TabPanel, TabContext } from '@mui/lab';
 import BasicInfo from './BasicInfo';
 import PricingStockInfo from './PricingStockInfo';
@@ -9,6 +21,7 @@ import CategoryLocationInfo from './CategoryLocationInfo';
 import { createProduct, getProductById, updateProduct, deleteProduct } from '../../api/crudProducts';
 import { Product } from '../../types/types';
 import { useNotification } from '../../context/NotificationContext';
+
 
 const ItemForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();

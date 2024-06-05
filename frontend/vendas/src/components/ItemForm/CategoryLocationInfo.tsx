@@ -1,6 +1,10 @@
 import React from 'react';
 import { Controller } from 'react-hook-form';
-import { Grid, TextField, MenuItem, FormControlLabel, Switch } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 interface CategoryLocationInfoProps {
   control: any;

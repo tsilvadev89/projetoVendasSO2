@@ -1,5 +1,11 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, Typography, Grid, Box, Tooltip } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
 import { useTheme, alpha } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import DescriptionIcon from '@mui/icons-material/Description';
