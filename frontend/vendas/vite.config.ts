@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 
-/* export default defineConfig({
+export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
@@ -11,9 +11,8 @@ import react from '@vitejs/plugin-react';
 
 });
 
- */
 
-export default defineConfig({
+/* export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
@@ -24,7 +23,7 @@ export default defineConfig({
       },
     },
   },
-/*   build: {
+  build: {
     outDir: '/var/www/html', // Define o diretório de saída para a pasta do Apache
-  }, */
-});
+  },
+}); */
