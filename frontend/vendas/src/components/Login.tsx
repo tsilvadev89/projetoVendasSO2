@@ -1,5 +1,4 @@
-// src/components/Login.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -18,7 +17,6 @@ import logo from '../assets/img/logo.png';
 import { fetchUsers, validateUser } from '../api/crudUser';
 import { User } from '../types/types';
 
-
 const schema = z.object({
   email: z.string().email({ message: 'Email inválido' }),
   password: z.string().min(4, { message: 'A senha deve ter no mínimo 4 caracteres' }),
@@ -32,31 +30,22 @@ const Login: React.FC = () => {
     resolver: zodResolver(schema),
   });
 
-  const [users, setUsers] = useState<User[]>([]);
   const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
-  useEffect(() => {
-    const loadUsers = async () => {
-      try {
-        const usersData = await fetchUsers();
-        setUsers(usersData);
-      } catch (error) {
-        setNotification({ type: 'error', message: 'Erro ao carregar usuários' });
+  const onSubmit = async (data: LoginFormInputs) => {
+    try {
+      const users: User[] = await fetchUsers();
+      const user = validateUser(users, data.email, data.password);
+      if (user) {
+        setNotification({ type: 'success', message: 'Login bem-sucedido!' });
+        setTimeout(() => {
+          navigate('/home');
+        }, 1000);
+      } else {
+        setNotification({ type: 'error', message: 'Credenciais inválidas' });
       }
-    };
-
-    loadUsers();
-  }, []);
-
-  const onSubmit = (data: LoginFormInputs) => {
-    const user = validateUser(users, data.email, data.password);
-    if (user) {
-      setNotification({ type: 'success', message: 'Login bem-sucedido!' });
-      setTimeout(() => {
-        navigate('/home');
-      }, 1000);
-    } else {
-      setNotification({ type: 'error', message: 'Credenciais inválidas' });
+    } catch (error) {
+      setNotification({ type: 'error', message: 'Erro ao carregar usuários' });
     }
   };
 
