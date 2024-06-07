@@ -33,6 +33,8 @@ app.use(helmet());
 app.use(limiter);
 app.use(cors({
     origin: 'http://localhost:4173',
+    origin: 'http://localhost',
+    origin: 'http://18.213.164.46/',
     /* origin: 'http://localhost:5173', */
     methods: ['POST', 'GET', 'PUT', 'DELETE'],
     credentials: true
