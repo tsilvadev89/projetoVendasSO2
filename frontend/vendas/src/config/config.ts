@@ -1,6 +1,6 @@
 const config = {
   frontendIP: '',
-  backendIP: '18.213.164.46:3000', // ENDEREÇO DO AWS
+  backendIP: 'http://18.213.164.46:3000', // ENDEREÇO DO AWS
 };
 
 /* const config = {

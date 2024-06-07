@@ -6,6 +6,7 @@ const API_URL = `${config.backendIP}/us`;
 /* const API_URL = 'http://localhost:3000/us'; */
 
 export const fetchUsers = async (): Promise<User[]> => {
+  console.log(API_URL);
   const response = await fetch(API_URL);
   if (!response.ok) {
     throw new Error('Erro ao buscar usuários');

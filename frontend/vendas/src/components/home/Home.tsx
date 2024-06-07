@@ -13,6 +13,10 @@ import AddIcon from '@mui/icons-material/Add';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import axios from 'axios';
 import { getProducts } from '../../api/crudProducts';
+import config from '../../config/config';
+
+
+const API_URL = config.backendIP;
 
 const Home: React.FC = () => {
   const [items, setItems] = useState<Product[]>([]);
@@ -42,7 +46,8 @@ const Home: React.FC = () => {
   };
 
   const handleLogout = () => {
-    axios.post('http://localhost:3000/logout')
+    axios.post(`${API_URL}/logout`)
+    /* axios.post('http://localhost:3000/logout') */
       .then(() => {
         navigate('/');
       })
