@@ -3,9 +3,9 @@ import axios from 'axios';
 import { Product } from '../types/types';
 import config from "../config/config";
 
-const apiUrl = `${config.backendIP}/product`;
+/* const apiUrl = `${config.backendIP}/product`; */
 
-/* const apiUrl = 'http://localhost:3000/product'; */
+const apiUrl = 'http://localhost:3000/product';
 
 
 export const createProduct = async (product: Product): Promise<Product> => {

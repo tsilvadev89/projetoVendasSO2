@@ -1,9 +1,9 @@
 import { User } from "../types/types";
 import config from "../config/config";
 
-const API_URL = `${config.backendIP}/us`;
+/* const API_URL = `${config.backendIP}/us`; */
 
-/* const API_URL = 'http://localhost:3000/us'; */
+const API_URL = 'http://localhost:3000/us';
 
 export const fetchUsers = async (): Promise<User[]> => {
   console.log(API_URL);
