@@ -22,8 +22,8 @@ const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
 
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 200 // limit each IP to 100 requests per windowMs
+    windowMs: 15 * 60 * 1000, // Tempo de seção
+    max: 200 //  Segurança quantidade de requisições
 });
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -38,9 +38,6 @@ app.use(cors({
 }));
 app.set('view engine', 'ejs');
 app.use(cookieParser());
-
-/* origin: 'http://localhost:4173', */
-/* origin: 'http://localhost:5173', */
 
 // Organização sessão cookie
 app.use(session({
